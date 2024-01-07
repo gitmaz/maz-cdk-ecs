@@ -26,10 +26,19 @@ export class MazCdkEcsStack extends cdk.Stack {
       image: ecs.ContainerImage.fromRegistry('php:8.2-cli'),
     });
 
+    const ssmAgentContainer = taskDefinition.addContainer('ssm-agent', {
+     image: ecs.ContainerImage.fromRegistry('amazonlinux'),
+     essential: true,
+     command: ['sh', '-c', 'amazon-linux-extras enable ssm-agent && yum install -y amazon-ssm-agent'],
+     user: 'root',
+    });
+
+
     // ECS Service
     const service = new ecs.FargateService(this, 'MyService', {
       cluster,
       taskDefinition,
+      securityGroups: ["default", allowSSMServiceInboundRule],
     });
 
     // Lambda Function
