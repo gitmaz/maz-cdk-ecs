@@ -33,7 +33,7 @@ export class MazCdkEcsStack extends cdk.Stack {
     });
 
     // Lambda Function
-    const handler = new lambda.Function(this, 'MyLambdaFunction', {
+   /* const handler = new lambda.Function(this, 'MyLambdaFunction', {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('lambda'), // Path to your Lambda function code
@@ -42,7 +42,7 @@ export class MazCdkEcsStack extends cdk.Stack {
         ECS_SERVICE_NAME: service.serviceName,
         SQS_QUEUE_URL: queue.queueUrl,
       },
-    });
+    });*/
 
     // Grant permissions for Lambda to receive messages from SQS
     queue.grantConsumeMessages(handler);
