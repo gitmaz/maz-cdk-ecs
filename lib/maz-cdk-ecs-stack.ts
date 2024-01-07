@@ -45,7 +45,7 @@ export class MazCdkEcsStack extends cdk.Stack {
     });*/
 
     // Grant permissions for Lambda to receive messages from SQS
-    queue.grantConsumeMessages(handler);
+   // queue.grantConsumeMessages(handler);
 
 /* Todo: deploying this fails. debug it please first
     // Schedule the Lambda function to run every week on Sundays
