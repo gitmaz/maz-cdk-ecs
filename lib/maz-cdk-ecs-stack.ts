@@ -5,6 +5,9 @@ import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+
 
 export class MazCdkEcsStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -25,6 +28,31 @@ export class MazCdkEcsStack extends cdk.Stack {
     const container = taskDefinition.addContainer('MyContainer', {
       image: ecs.ContainerImage.fromRegistry('php:8.2-cli'),
     });
+
+// Create a new VPC
+    const myVpc = new ec2.Vpc(this, 'MyVpc', {
+      maxAzs: 2, // Adjust the number of availability zones as needed
+    });
+    
+    // Define the security group
+const mySecurityGroup = new ec2.SecurityGroup(this, 'MySecurityGroup', {
+  vpc: myVpc, // Replace myVpc with your actual VPC
+  description: 'Allow inbound traffic from Systems Manager service on port 443',
+});
+
+    // Allow inbound traffic from Systems Manager service on port 443
+    mySecurityGroup.addIngressRule(
+      ec2.Peer.ipv4('54.239.30.80/32'), // Replace with the Systems Manager service IP range
+      ec2.Port.tcp(443),
+      'Allow inbound from Systems Manager service'
+    );
+
+// Allow inbound traffic from Systems Manager service on port 443
+mySecurityGroup.addIngressRule(
+  ec2.Peer.ipv4('54.239.30.80/32'), // Replace with the Systems Manager service IP range
+  ec2.Port.tcp(443),
+  'Allow inbound from Systems Manager service'
+);
 
     const ssmAgentContainer = taskDefinition.addContainer('ssm-agent', {
      image: ecs.ContainerImage.fromRegistry('amazonlinux'),
