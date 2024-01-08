@@ -41,7 +41,7 @@ const mySecurityGroup = new ec2.SecurityGroup(this, 'MySecurityGroup', {
 
     // Allow inbound traffic from Systems Manager service on port 443
     mySecurityGroup.addIngressRule(
-      ec2.Peer.ipv4('52.95.36.0/22'),//54.239.30.80/32'), // Replace with the Systems Manager service IP range
+      ec2.Peer.ipv4('172.31.0.0/16'),//52.95.36.0/22'),//54.239.30.80/32'), // Replace with the Systems Manager service IP range
       ec2.Port.tcp(443),
       'Allow inbound from Systems Manager service'
     );
