@@ -66,7 +66,7 @@ mySecurityGroup.addIngressRule(
     const service = new ecs.FargateService(this, 'MyService', {
       cluster,
       taskDefinition,
-      securityGroups: ["default", allowSSMServiceInboundRule],
+      securityGroups: [mySecurityGroup]
     });
 
     // Lambda Function
